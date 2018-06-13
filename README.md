@@ -33,6 +33,8 @@
 На пример доколку корисникот ќе го згреши седмото прашања ќе ги земе парите кои одговараат на петтото ниво, доколку го згреши тринаесеттото прашање ќе ги земи парите кои одговараат на десеттото ниво а доколку го згреши четвртото прашање нема да земи ништо
 ```
 
+## Објаснување на кодот
+
 Кодот се содржи од две класи: Igrach која одговара на милионерот и Igrach1 која одговара на квизот на време. И двете класи содржат 3 листи од листи од стринг компоненти во вид на динамички матрици. Секоја листа се состои до 6 стринг компоненти:
 
 - Првиот компонент го содржи прашањето
@@ -57,4 +59,64 @@
 
 Потоа се проверува дали параметарот е еднаков со бројот во листата односно бројот на одговорот кој е точен. Доколку е еднаков се враќа вредност true а доколку не е се враќа вредност false.
 
+При старт на програмата не иницијализираат две листи едната содржи објекти од едната класа а другата објекти од другата. При крај на секоја игра во функцијата endGame() се додава објектот кој ги содржи вкупниот број на освоени поени и вкупниот број на освоени пари за подоцна да се рангираат во делот за рекорди
+
+## Објаснување на функцијата nextQuestion()
+
+Функцијата nextQuestion() ја има во двете класи со различен код. Во овој случај ќе го разгледаме кодот во класата за Квизот на Време:
+
+```
+public void nextQuestion()
+    {
+        grupa = random.Next(1, 4);
+        if (grupa==3 && questionHigh.Count == 0) grupa = 2;
+        if (grupa==2 && questionsMedium.Count == 0) grupa = 1;
+        if (questionsLow.Count == 0 && questionsMedium.Count == 0 && questionHigh.Count==0)
+        {
+            empty = true;
+        }
+        if (grupa == 1)
+        {
+            poz = random.Next(0, questionsLow.Count);
+            question = questionsLow.ElementAt(poz);
+            questionsLow.RemoveAt(poz);
+            poeni = 1;
+        }
+        else if (grupa == 2)
+        {
+            poz = random.Next(0, questionsMedium.Count);
+            question = questionsMedium.ElementAt(poz);
+            questionsMedium.RemoveAt(poz);
+            poeni = 3;
+        }
+        else if(grupa==3)
+        {
+            poz = random.Next(0, questionHigh.Count);
+            question = questionHigh.ElementAt(poz);
+            questionHigh.RemoveAt(poz);
+            poeni = 5;
+        }
+        question1 = question.ElementAt(0);
+        answer1 = question.ElementAt(1);
+        answer2 = question.ElementAt(2);
+        answer3 = question.ElementAt(3);
+        answer4 = question.ElementAt(4);
+        answer = Int32.Parse(question.ElementAt(5));
+    }
+```
  
+ Прво за променливата **grupa** се бира случаен број од 1 до 3. Потоа имаме три if кодови секој зема прашање од различна листа со ниво. Променливата **poz** добива случајна вредност од 0 до бројот на елементи на листата односо се бира прашање по случаен избор со кодот:
+
+```
+poz = random.Next(0, questionHigh.Count);
+question = questionHigh.ElementAt(poz);
+```
+
+Потоа истото прашање се бриши од листата за да не се избери повторно и врз база на нивото променливата **poeni** се мести на вредност или 1 или 3 или 5 за потоа да се додаде на вкупниот број на поени:
+
+```
+questionHigh.RemoveAt(poz);
+poeni = 5;
+```
+
+Потоа стринговите **question1**, **answer1**, **answer2**,  **answer3** и **answer4** се местат на елементите кои се на n-та позиција од листата соодветното и промелнивата **answer** се мести на бројот на точниот одговор.
